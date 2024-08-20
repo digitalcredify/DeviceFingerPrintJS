@@ -3,15 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Finger Print para JavaScript</title>
+    <title>Device Finger Print para JavaScript</title>
   </head>
   <body></body>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     const getFingerprint = async () => {
-    try {
+      try {
         // Carregar o agente
-        const FingerprintJS = await import('https://openfpcdn.io/fingerprintjs/v4');
+        const FingerprintJS = await import(
+          "https://openfpcdn.io/fingerprintjs/v4"
+        );
         const fp = await FingerprintJS.load();
 
         // Obter o identificador do visitante
@@ -19,27 +21,29 @@
 
         // Este é o identificador do visitante:
         const visitorId = result.visitorId;
-        const accesskey = "your-access-key";//Peça seu accesskey para equipe Credify
+        const accesskey = "your-access-key"; //Peça seu accesskey para equipe Credify
+        const action = "action-to-call-api"; // descrição do momento a chamada será feita, exemplo:( "login", "cadastro", "consulta", etc)
         const bodyParams = {
-            visitorId,
-            accesskey,
-            document: "document-to-identify-the-client",
-            tipoDocument: "tipe-of-document",//CPF:"1", CNPJ:"2", CNH:"3", RG:"4"
+          visitorId,
+          accesskey,
+          action,
+          document: "document-to-identify-the-client",
+          tipoDocument: "type-of-document", // Opções: "CPF", "CNPJ", "CNH", "RG" ou "OUTROS"
         };
 
         axios
-            .post(`https://dev-app.credify.com.br/device-finger-print`, bodyParams)
-            .then((res) => {
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
-    } catch (error) {
-        console.error('Erro ao carregar FingerprintJS:', error);
-    }
-};
+          .post(`https://back.credify.com.br/device-finger-print`, bodyParams)
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } catch (error) {
+        console.error("Erro ao carregar FingerprintJS:", error);
+      }
+    };
 
-getFingerprint();
+    getFingerprint();
   </script>
 </html>
