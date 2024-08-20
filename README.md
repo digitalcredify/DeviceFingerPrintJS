@@ -2,7 +2,7 @@
 
 ## Introdução
 
-Este repositório contém um exemplo de implementação para capturar a impressão digital do dispositivo (Device Fingerprint) utilizando JavaScript. O código faz uso da biblioteca FingerprintJS e envia os dados coletados para a plataforma da Credify. 
+Este repositório contém um exemplo de implementação para capturar a impressão digital do dispositivo (Device Fingerprint) utilizando JavaScript. O código faz uso da biblioteca FingerprintJS e envia os dados coletados para a plataforma da Credify.
 
 ## Requisitos
 
@@ -32,7 +32,9 @@ Adicione o código abaixo à sua aplicação para capturar a impressão digital 
     const getFingerprint = async () => {
       try {
         // Carregar o agente
-        const FingerprintJS = await import('https://openfpcdn.io/fingerprintjs/v4');
+        const FingerprintJS = await import(
+          "https://openfpcdn.io/fingerprintjs/v4"
+        );
         const fp = await FingerprintJS.load();
 
         // Obter o identificador do visitante
@@ -41,15 +43,18 @@ Adicione o código abaixo à sua aplicação para capturar a impressão digital 
         // Este é o identificador do visitante:
         const visitorId = result.visitorId;
         const accesskey = "your-access-key"; // Peça seu accesskey para equipe Credify
+        const action = "action-to-call-api"; // Descrição do momento da chamada: "login", "cadastro", "consulta", etc.
         const bodyParams = {
           visitorId,
           accesskey,
+          action,
           document: "document-to-identify-the-client",
-          tipoDocument: "type-of-document", // CPF: "1", CNPJ: "2", CNH: "3", RG: "4"
+          tipoDocument: "type-of-document", // Opções: "CPF", "CNPJ", "CNH", "RG" ou "OUTROS"
         };
 
+        // Enviar os dados para a Credify
         axios
-          .post('https://back.credify.com.br/device-finger-print', bodyParams)
+          .post(`https://back.credify.com.br/device-finger-print`, bodyParams)
           .then((res) => {
             console.log(res.data);
           })
@@ -57,7 +62,7 @@ Adicione o código abaixo à sua aplicação para capturar a impressão digital 
             console.error(err);
           });
       } catch (error) {
-        console.error('Erro ao carregar FingerprintJS:', error);
+        console.error("Erro ao carregar FingerprintJS:", error);
       }
     };
 
@@ -69,18 +74,15 @@ Adicione o código abaixo à sua aplicação para capturar a impressão digital 
 ### Parâmetros do Código
 
 - **accesskey**: Substitua `"your-access-key"` pela access key fornecida pela equipe da Credify.
+- **action**: Descreva a ação que está sendo realizada quando a chamada à API é feita, como `"login"`, `"cadastro"`, `"consulta"`, etc.
 - **document**: Informe o documento do usuário que está acessando a plataforma.
-- **tipoDocument**: Informe o tipo de documento utilizando os seguintes códigos:
-  - CPF: `"1"`
-  - CNPJ: `"2"`
-  - CNH: `"3"`
-  - RG: `"4"`
+- **tipoDocument**: Informe o tipo de documento utilizando uma das seguintes opções: `"CPF"`, `"CNPJ"`, `"CNH"`, `"RG"`, ou `"OUTROS"`.
 
 ### Explicação do Código
 
-1. **Carregamento do FingerprintJS**: O script importa a biblioteca FingerprintJS para capturar a impressão digital do dispositivo.
+1. **Carregamento do FingerprintJS**: O código importa dinamicamente a biblioteca FingerprintJS.
 2. **Obtenção do Identificador do Visitante**: O identificador único do visitante é obtido e armazenado na variável `visitorId`.
-3. **Criação dos Parâmetros do Corpo da Requisição**: Um objeto `bodyParams` é criado contendo `visitorId`, `accesskey`, `document` e `tipoDocument`.
+3. **Criação dos Parâmetros do Corpo da Requisição**: Um objeto `bodyParams` é criado contendo `visitorId`, `accesskey`, `action`, `document`, e `tipoDocument`.
 4. **Envio dos Dados para a Credify**: Utilizando Axios, os dados são enviados para o endpoint da Credify.
 
 ## Contato
